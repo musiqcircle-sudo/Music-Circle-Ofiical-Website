@@ -13,13 +13,13 @@ const StoreSection: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<StoreProduct | null>(null);
 
   useEffect(() => {
-    const loadVault = async () => {
+    const loadStore = async () => {
       setIsLoading(true);
       const data = await api.fetchVaultInstruments();
       setRegistry(data);
       setIsLoading(false);
     };
-    loadVault();
+    loadStore();
   }, []);
 
   const getIcon = (cat: string) => {

@@ -1,37 +1,78 @@
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ReliableImageProps {
   src: string;
   alt: string;
   fallbackKeywords: string;
   className?: string;
+  hoverEffect?: boolean;
+  objectPosition?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
-const ReliableImage: React.FC<ReliableImageProps> = ({ src, alt, fallbackKeywords, className }) => {
-  const [imgSrc, setImgSrc] = useState(src);
-  const [hasError, setHasError] = useState(false);
+const ReliableImage: React.FC<ReliableImageProps> = ({ 
+  src, 
+  alt, 
+  className, 
+  hoverEffect = true,
+  objectPosition = "center",
+  objectFit = "cover"
+}) => {
+  const [imgSrc, setImgSrc] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const handleError = () => {
-    if (!hasError) {
-      // Fallback to high-resolution verified media archive with specific keywords
-      const archiveUrl = `https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=90&w=1600&music,${encodeURIComponent(fallbackKeywords)}`;
-      setImgSrc(archiveUrl);
-      setHasError(true);
+  useEffect(() => {
+    setIsLoading(true);
+    setError(false);
+    
+    if (!src || src.length < 15 || src.includes('placeholder')) {
+      setError(true);
+      setIsLoading(false);
+      return;
     }
-  };
+    
+    setImgSrc(src);
+  }, [src]);
+
+  if (error) return null;
 
   return (
-    <motion.img
-      src={imgSrc}
-      alt={alt}
-      onError={handleError}
-      className={`${className} w-full h-full object-cover`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    />
+    <div className={`relative w-full h-full bg-neutral-950 overflow-hidden flex items-center justify-center ${className}`}>
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-neutral-900 z-10 flex items-center justify-center"
+          >
+             <div className="w-full h-full animate-pulse bg-white/[0.02]" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <motion.img
+        src={imgSrc}
+        alt={alt}
+        onError={() => setError(true)}
+        onLoad={() => setIsLoading(false)}
+        loading="lazy"
+        className={`w-full h-full transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isLoading ? 'opacity-0' : 'opacity-100'
+        } ${hoverEffect ? 'grayscale group-hover:grayscale-0 group-hover:scale-105' : 'grayscale-0'}`}
+        style={{ 
+          imageRendering: 'high-quality', 
+          objectPosition,
+          objectFit,
+          filter: hoverEffect && isLoading ? 'grayscale(100%) blur(10px)' : (hoverEffect ? undefined : 'grayscale(0%)')
+        }}
+      />
+      
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+    </div>
   );
 };
 

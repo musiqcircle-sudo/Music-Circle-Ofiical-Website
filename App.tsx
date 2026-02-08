@@ -20,9 +20,9 @@ import * as api from './services/apiService';
 
 const INITIAL_TRACK: Track = {
   id: 'startup-seq',
-  title: 'STRANGER THINGS THEME',
-  artist: 'SURVIVE',
-  album: 'Stranger Things OST',
+  title: 'BRAND FILM TRANSMISSION',
+  artist: 'MUSIC CIRCLE',
+  album: 'Live Transmission',
   genre: MusicGenre.CINEMATIC,
   audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
   quotes: []
@@ -54,39 +54,38 @@ const App: React.FC = () => {
   const smoothScrollY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
-    const timer = setTimeout(() => setHasEntered(true), 5500);
+    syncInitialData();
+    const timer = setTimeout(() => setHasEntered(true), 4000);
     return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    if (hasEntered) {
-      if (newsItems.length === 0) syncNews();
-      if (!featuredArtist) syncArtist();
-      if (!sonicIdentity) syncSonicIdentity();
-    }
-  }, [hasEntered]);
-
-  const syncSonicIdentity = async () => {
-    const quote = await api.fetchQuote();
-    setSonicIdentity({
-      quote,
-      colors: ['#3b82f6', '#8b5cf6'],
-      insight: "Frequencies synchronized."
-    });
-  };
-
-  const syncNews = async () => {
+  const syncInitialData = async () => {
     setIsNewsLoading(true);
-    const news = await api.fetchMusicNews();
-    setNewsItems(news);
-    setIsNewsLoading(false);
-  };
-
-  const syncArtist = async (name?: string) => {
     setIsArtistLoading(true);
-    const artist = await api.fetchArtistBio(name);
-    setFeaturedArtist(artist);
-    setIsArtistLoading(false);
+    try {
+      // Step 1: Sync News Feed (RSS)
+      const news = await api.fetchMusicNews();
+      setNewsItems(news);
+      setIsNewsLoading(false);
+
+      // Step 2: Sync Artist of the Day from Editorial Feed
+      const artist = await api.fetchArtistBio();
+      setFeaturedArtist(artist);
+      setIsArtistLoading(false);
+
+      // Step 3: Get an editorial quote
+      const quote = await api.fetchQuote();
+      setSonicIdentity({
+        quote,
+        colors: ['#3b82f6', '#8b5cf6'],
+        insight: "Frequencies synchronized from editorial signals."
+      });
+    } catch (e) {
+      console.error("Data sync failed", e);
+    } finally {
+      setIsNewsLoading(false);
+      setIsArtistLoading(false);
+    }
   };
 
   const handleTogglePlay = () => {
@@ -107,12 +106,7 @@ const App: React.FC = () => {
         {!hasEntered && <IntroAnimation key="intro" />}
       </AnimatePresence>
 
-      <BackgroundSystem 
-        isPlaying={isPlaying} 
-        sonicIdentity={sonicIdentity} 
-        orbY1={smoothScrollY} 
-        orbY2={smoothScrollY} 
-      />
+      <BackgroundSystem isPlaying={isPlaying} sonicIdentity={sonicIdentity} orbY1={smoothScrollY} orbY2={smoothScrollY} />
       
       <audio 
         ref={audioRef} 
@@ -125,7 +119,7 @@ const App: React.FC = () => {
       
       <motion.div 
         animate={{ opacity: hasEntered ? 1 : 0 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
+        transition={{ duration: 1.5, delay: 0.2 }}
         className="flex flex-col relative z-10"
       >
         <Header 

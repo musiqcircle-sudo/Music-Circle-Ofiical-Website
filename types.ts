@@ -2,21 +2,29 @@
 export interface NewsItem {
   id: string;
   title: string;
-  category: 'Moment' | 'Release' | 'Session' | 'Artist';
+  category: string;
   date: string;
+  timestamp: number;
   image: string;
+  imageAttribution?: string;
   description: string;
-  sourceName?: string;
-  sourceUrl?: string;
+  sourceName: string;
+  sourceUrl: string;
   isBreaking?: boolean;
 }
 
 export enum GenreFilter {
   ALL = 'All',
-  MOMENT = 'Moment',
-  RELEASE = 'Release',
-  SESSION = 'Session',
-  ARTIST = 'Artist'
+  BREAKING = 'News',
+  JAZZ = 'Jazz',
+  CLASSICAL = 'Classical',
+  INDIE = 'Indie',
+  ELECTRONIC = 'Electronic',
+  FOLK_AMERICANA = 'Folk/Americana',
+  HIP_HOP_RB = 'Hip-Hop/R&B',
+  WORLD = 'World',
+  ROCK = 'Rock',
+  GENERAL = 'General'
 }
 
 export enum MusicGenre {
@@ -86,12 +94,4 @@ export interface StoreProduct {
   image: string;
   description?: string;
   specs?: string[];
-}
-
-export interface StoreCategory {
-  title: string;
-  items: StoreProduct[];
-  icon: string;
-  description: string;
-  heroImage: string;
 }

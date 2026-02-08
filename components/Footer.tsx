@@ -14,7 +14,7 @@ import {
   ArrowUpRight 
 } from 'lucide-react';
 
-const SocialLink = ({ href, label, icon: Icon }: { href: string; label: string; icon: any }) => (
+const SocialLink = ({ href, label }: { href: string; label: string }) => (
   <li className="list-none">
     <motion.a 
       href={href} 
@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row justify-between gap-16 lg:gap-24 mb-24">
           
-          {/* Newsletter Section (Left) */}
+          {/* Newsletter Section */}
           <div className="lg:max-w-md space-y-10">
             <div className="space-y-4">
               <h3 className="text-3xl md:text-4xl font-semibold tracking-tight text-white leading-tight">
@@ -86,40 +86,35 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Link Columns (Right) */}
+          {/* Link Columns */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-12 lg:gap-20">
-            
-            {/* Column 1: Transmissions */}
             <div className="space-y-6">
               <h4 className="text-[12px] uppercase tracking-widest font-semibold text-white/30">Transmissions</h4>
               <ul className="space-y-2 p-0 m-0">
-                <SocialLink href="https://www.youtube.com/@officialmusiccircle" label="YouTube" icon={Youtube} />
-                <SocialLink href="https://instagram.com/officialmusiccircle" label="Instagram" icon={Instagram} />
-                <SocialLink href="https://tiktok.com/@officialmusiccircle" label="TikTok" icon={Music2} />
+                <SocialLink href="https://www.youtube.com/@officialmusiccircle" label="YouTube" />
+                <SocialLink href="https://instagram.com/officialmusiccircle" label="Instagram" />
+                <SocialLink href="https://tiktok.com/@officialmusiccircle" label="TikTok" />
               </ul>
             </div>
 
-            {/* Column 2: Social */}
             <div className="space-y-6">
               <h4 className="text-[12px] uppercase tracking-widest font-semibold text-white/30">Social</h4>
               <ul className="space-y-2 p-0 m-0">
-                <SocialLink href="https://x.com/OffMusiccircle" label="Twitter" icon={Twitter} />
-                <SocialLink href="https://facebook.com/officialmusiccircle" label="Facebook" icon={Facebook} />
-                <SocialLink href="https://bsky.app/profile/musiccircle.bsky.social" label="Bluesky" icon={Waves} />
+                <SocialLink href="https://x.com/OffMusiccircle" label="Twitter" />
+                <SocialLink href="https://facebook.com/officialmusiccircle" label="Facebook" />
+                <SocialLink href="https://bsky.app/profile/musiccircle.bsky.social" label="Bluesky" />
               </ul>
             </div>
 
-            {/* Column 3: Resources */}
             <div className="space-y-6">
               <h4 className="text-[12px] uppercase tracking-widest font-semibold text-white/30">Resources</h4>
               <ul className="space-y-2 p-0 m-0">
-                <SocialLink href="https://buymeacoffee.com/musiccircle" label="Support" icon={Coffee} />
-                <SocialLink href="https://linktr.ee/musiccircle" label="Media Kit" icon={LinkIcon} />
+                <SocialLink href="https://buymeacoffee.com/musiccircle" label="Support" />
+                <SocialLink href="https://linktr.ee/musiccircle" label="Media Kit" />
                 <FooterLink label="Downloads" />
               </ul>
             </div>
 
-            {/* Column 4: Brand */}
             <div className="space-y-6">
               <h4 className="text-[12px] uppercase tracking-widest font-semibold text-white/30">Company</h4>
               <ul className="space-y-2 p-0 m-0">
@@ -128,32 +123,20 @@ const Footer: React.FC = () => {
                 <FooterLink label="Privacy" />
               </ul>
             </div>
-
           </div>
         </div>
 
-        {/* Bottom Footer Section */}
+        {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-8">
-          <motion.div 
-            whileHover={{ opacity: 0.4 }}
-            className="text-[10px] uppercase tracking-[0.4em] text-white/20 font-bold cursor-default"
-          >
+          <div className="text-[10px] uppercase tracking-[0.4em] text-white/20 font-bold cursor-default">
             © 2025 MUSIC CIRCLE. ONE CIRCLE. INFINITE SOUND.
-          </motion.div>
+          </div>
           
           <div className="flex gap-10 text-[9px] uppercase tracking-[0.4em] font-black">
-            <motion.a 
-              whileHover={{ color: '#fff' }}
-              href="#" 
-              className="text-white/10 transition-colors"
-            >
+            <motion.a whileHover={{ color: '#fff' }} href="#" className="text-white/10 transition-colors">
               Play from the heart
             </motion.a>
-            <motion.a 
-              whileHover={{ color: '#fff' }}
-              href="#" 
-              className="text-white/10 transition-colors"
-            >
+            <motion.a whileHover={{ color: '#fff' }} href="#" className="text-white/10 transition-colors">
               Be real. Be yourself.
             </motion.a>
           </div>
